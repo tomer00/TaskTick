@@ -23,7 +23,7 @@ class HiltModules {
 
     @Provides
     @Singleton
-    fun provideChannelDao(appDatabase: Database): Dao = appDatabase.channelDao()
+    fun provideTaskDao(appDatabase: Database): Dao = appDatabase.taskDao()
 
 
     @Provides
