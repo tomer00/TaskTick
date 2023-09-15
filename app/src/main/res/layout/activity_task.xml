@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activities.TaskActivity">
+
+
+    <ImageView
+        android:id="@+id/btBack"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_margin="12dp"
+        android:background="@drawable/ripple_bg"
+        android:contentDescription="@string/des"
+        android:src="@drawable/chevron_left"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/topHead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Note"
+        android:textSize="26sp"
+        app:layout_constraintBottom_toBottomOf="@id/btBack"
+        app:layout_constraintStart_toEndOf="@id/btBack"
+        app:layout_constraintTop_toTopOf="@id/btBack" />
+
+
+    <com.tomer.tasktick.ui.views.RvRowBG
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:colorDots="@color/primary_dark"
+        app:radius="48dp"
+        app:position="topLeft"
+        app:layout_constraintBottom_toBottomOf="@id/etTaskDes"
+        app:layout_constraintTop_toBottomOf="@id/topHead" />
+
+    <EditText
+        android:id="@+id/etTaskDes"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_margin="20dp"
+        android:layout_marginTop="20dp"
+        android:autofillHints=""
+        android:background="@drawable/et_bg"
+        android:gravity="top"
+        android:padding="8dp"
+        app:layout_constraintTop_toBottomOf="@id/topHead" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

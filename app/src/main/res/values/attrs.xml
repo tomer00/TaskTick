@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="RvRowBG">
+        <attr name="colorDots" format="color" />
+        <attr name="radius" format="dimension" />
+        <attr name="position" format="enum" >
+            <enum name="topLeft" value="0"/>
+            <enum name="center" value="1"/>
+            <enum name="bottomRight" value="2"/>
+        </attr>
+    </declare-styleable>
+</resources>

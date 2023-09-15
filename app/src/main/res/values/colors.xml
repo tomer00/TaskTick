@@ -18,10 +18,10 @@
     <color name="trans">#00000000</color>
     <color name="black">#000</color>
     <color name="red_update">#ED0F09</color>
-    <color name="bmi_tint">#8A8A8A</color>
+    <color name="gray">#8A8A8A</color>
     <color name="backgroundLight">#F1F1F1</color>
     <color name="backgroundC">#fff</color>
-    <color name="fore">#000</color>
     <color name="hint">#99000000</color>
     <color name="purple">#c678dd</color>
+    <color name="foreground">#0C0C0C</color>
 </resources>
