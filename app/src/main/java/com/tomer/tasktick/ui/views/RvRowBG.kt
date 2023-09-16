@@ -44,7 +44,6 @@ class RvRowBG : View {
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        Log.d("TAG--", "onSizeChanged: $w  $h")
         val p12 = 12f.toPX()
         when (posInt) {
             1 -> {
@@ -90,5 +89,6 @@ class RvRowBG : View {
 
     fun setCol(col: Int) {
         paintBlur.color = col
+        postInvalidate()
     }
 }

@@ -23,6 +23,6 @@ interface Dao {
     @Delete
     fun deleteMany(tasks: List<Task>)
 
-    @Query("SELECT * from tasks ORDER by created DESC")
-    fun getAllTasks(): List<Task>
+    @Query("SELECT * from tasks where created > :time ORDER by created DESC")
+    fun getAllTasks(time:Long): List<Task>
 }

@@ -7,9 +7,7 @@ import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class TaskRepoImpl @Inject constructor(private val dao: Dao) : TaskRepo {
-    override suspend fun getAllTasks(): List<Task> {
-        return dao.getAllTasks()
+    override suspend fun getAllTasks(time:Long): List<Task> {
+        return dao.getAllTasks(time)
     }
-
-
 }
