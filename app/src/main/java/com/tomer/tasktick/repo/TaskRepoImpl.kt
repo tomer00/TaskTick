@@ -10,4 +10,8 @@ class TaskRepoImpl @Inject constructor(private val dao: Dao) : TaskRepo {
     override suspend fun getAllTasks(time:Long): List<Task> {
         return dao.getAllTasks(time)
     }
+
+    override fun delete(delTask: Task) {
+        dao.deleteTask(delTask)
+    }
 }

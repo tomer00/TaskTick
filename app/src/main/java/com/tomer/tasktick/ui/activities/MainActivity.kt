@@ -1,15 +1,28 @@
 package com.tomer.tasktick.ui.activities
 
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.renderscript.Allocation
+import android.renderscript.Element
+import android.renderscript.RenderScript
+import android.renderscript.ScriptIntrinsicBlur
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.withCreated
 import androidx.recyclerview.widget.ItemTouchHelper
+import com.tomer.tasktick.R
 import com.tomer.tasktick.adap.TaskAdap
 import com.tomer.tasktick.databinding.ActivityMainBinding
 import com.tomer.tasktick.ui.views.SwipeHelper
 import com.tomer.tasktick.viewmodals.MainViewModal
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -64,6 +77,10 @@ class MainActivity : AppCompatActivity(), TaskAdap.CallbackClick {
             snackBar.y = resources.displayMetrics.heightPixels + 10f
             btUndo.setOnClickListener {
                 viewModal.undo()
+            }
+            btAddTask.setOnClickListener {
+                val i = Intent(this@MainActivity,TaskActivity::class.java)
+                startActivity(i)
             }
         }
 

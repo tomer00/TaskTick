@@ -8,10 +8,10 @@ import androidx.room.PrimaryKey
 data class Task(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val des: String = "",
+    val des: String,
     @ColumnInfo(name = "created")
     val timeCreated: Long,
-    val timeDone: Long,
+    val timeDone: Long = 0L,
     val priority:Int,//1=low 2=medium 3=urgent
-    val isDone: Boolean
+    val isDone: Boolean = false
 )
