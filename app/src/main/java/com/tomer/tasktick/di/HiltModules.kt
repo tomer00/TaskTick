@@ -3,8 +3,8 @@ package com.tomer.tasktick.di
 import android.content.Context
 import androidx.room.Room
 import com.google.gson.Gson
-import com.tomer.tasktick.repo.FaekRepo
 import com.tomer.tasktick.repo.TaskRepo
+import com.tomer.tasktick.repo.TaskRepoImpl
 import com.tomer.tasktick.room.Dao
 import com.tomer.tasktick.room.Database
 import dagger.Module
@@ -40,6 +40,6 @@ class HiltModules {
 
     @Provides
     @Singleton
-    fun provideTaskRepo(): TaskRepo = FaekRepo()
+    fun provideTaskRepo(taskRepoImpl: TaskRepoImpl): TaskRepo = taskRepoImpl
 
 }

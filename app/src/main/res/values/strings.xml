@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">TaskTick</string>
     <string name="des">des</string>
+    <string name="low">LOW</string>
+    <string name="medium">Medium</string>
+    <string name="high">High</string>
+    <string name="day_of_task">Day of task...</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="time_of_task">Time of task...</string>
+    <string name="add_task">Add Task</string>
+    <string name="no_task">No Ongoing\nor\nUpcoming Task</string>
+    <string name="task_deleted">Task Deleted</string>
+    <string name="undo">Undo</string>
+    <string name="task_priority">Task Priority...</string>
+    <string name="upcoming_task">Upcoming Task...</string>
+    <string name="type_task_description">Type task description...</string>
 </resources>

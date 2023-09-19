@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.view.ViewAnimationUtils
+import android.view.ViewTreeObserver
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -40,6 +41,7 @@ class TaskActivity : AppCompatActivity() {
             btBack.setOnClickListener {
                 setResult(RESULT_CANCELED)
                 super.onBackPressed()
+                overridePendingTransition(R.anim.no_anim,R.anim.fadetobottom)
             }
             btPriorMed.setOnClickListener(vm.cli)
             btPriorHigh.setOnClickListener(vm.cli)
@@ -72,7 +74,7 @@ class TaskActivity : AppCompatActivity() {
                 b.daysLL.addView(v)
             }
             t = 0
-            vm.listTime.forEach { time ->
+            TaskViewModal.listTime.forEach { time ->
                 val v = layoutInflater.inflate(R.layout.time_row, b.daysLL, false) as TextView
                 v.text = time
                 v.tag = t++
@@ -118,6 +120,7 @@ class TaskActivity : AppCompatActivity() {
             }
             setResult(RESULT_OK, i)
             finish()
+            overridePendingTransition(R.anim.no_anim,R.anim.fadetobottom)
         }
 
 
@@ -126,25 +129,38 @@ class TaskActivity : AppCompatActivity() {
             else "Update Task"
         }
 
+        val ob = b.root.viewTreeObserver
+        if (ob.isAlive) {
+            ob.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    circleReveal()
+                    b.root.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                }
+            })
+        }
+
     }
 
-    override fun onEnterAnimationComplete() {
-        super.onEnterAnimationComplete()
+    private fun circleReveal() {
         val off = 52 * resources.displayMetrics.density
         ViewAnimationUtils.createCircularReveal(
             b.root, (resources.displayMetrics.widthPixels - off).toInt(),
             (resources.displayMetrics.heightPixels - off).toInt(), 0f,
             resources.displayMetrics.heightPixels.toFloat()
         ).apply {
-            duration = 440
+            duration = 520
         }.start()
 
         ObjectAnimator.ofObject(
             b.root, "backgroundColor", ArgbEvaluator(),
             ContextCompat.getColor(this, R.color.primary_dark), ContextCompat.getColor(this, R.color.backgroundLight)
         ).apply {
-            duration = 400
+            duration = 540
         }.start()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(R.anim.no_anim,R.anim.fadetobottom)
+    }
 }

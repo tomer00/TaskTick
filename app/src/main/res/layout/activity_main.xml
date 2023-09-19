@@ -34,33 +34,33 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+                android:id="@+id/tvDateDay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:fontFamily="@font/aclonica"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="24dp"
-                android:text="16"
-                android:textSize="36sp"
+                android:textSize="42sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/tvDateMonth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:padding="4dp"
-                android:text="AUG"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/tvDateYear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:padding="4dp"
-                android:text="2023"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -68,12 +68,34 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <TextView
+        android:id="@+id/placeHOlder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/aclonica"
+        android:gravity="center"
+        android:text="@string/no_task"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="@id/currentTask"
+        app:layout_constraintTop_toTopOf="@id/currentTask" />
+
+    <TextView
+        android:id="@+id/tvUpTask"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="@string/upcoming_task"
+        app:layout_constraintBottom_toTopOf="@id/currentTask"
+        app:layout_constraintStart_toStartOf="parent" />
     <include
         android:id="@+id/currentTask"
         layout="@layout/task_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:layout_marginHorizontal="12dp"
+        android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@id/topBar" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -99,7 +121,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Task Deleted"
+            android:text="@string/task_deleted"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -111,7 +133,7 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="10dp"
             android:paddingVertical="6dp"
-            android:text="Undo"
+            android:text="@string/undo"
             android:textColor="@color/primary_dark"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -123,8 +145,9 @@
         android:id="@+id/btAddTask"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_add"
         android:layout_margin="26dp"
+        android:contentDescription="@string/des"
+        android:src="@drawable/ic_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

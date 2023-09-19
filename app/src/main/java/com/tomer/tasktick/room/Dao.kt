@@ -1,28 +1,28 @@
 package com.tomer.tasktick.room
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.tomer.tasktick.modals.Task
+import com.tomer.tasktick.modals.TaskRoom
 
 @Dao
 interface Dao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertTask(task: Task)
+    fun insertTask(task: TaskRoom)
 
-    @Update
-    fun updateTask(task: Task)
+    @Query("UPDATE tasks SET comp = :c , isDone = 1 WHERE id = :idL")
+    fun updateTask(c: String,idL: Int)
 
-    @Delete
-    fun deleteTask(task: Task)
+    @Query("Delete from tasks where id = :taskID")
+    fun deleteTask(taskID: Int)
 
-    @Delete
-    fun deleteMany(tasks: List<Task>)
+    @Query("SELECT * from tasks where id > :idL ORDER BY created")
+    fun getAllTasks(idL:Int): List<TaskRoom>
 
-    @Query("SELECT * from tasks where created > :time ORDER by created DESC")
-    fun getAllTasks(time:Long): List<Task>
+    @Query("SELECT max(id) from tasks")
+    fun getMaxId():Int
+
 }

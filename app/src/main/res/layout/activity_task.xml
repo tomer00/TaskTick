@@ -4,9 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/trans"
     tools:context=".ui.activities.TaskActivity">
 
 
+    <com.tomer.tasktick.ui.views.RvRowBG
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:colorDots="#990463CA"
+        app:position="bottomRight"
+        app:radius="68dp" />
     <ImageView
         android:id="@+id/btBack"
         android:layout_width="42dp"
@@ -23,7 +30,6 @@
         android:id="@+id/topHead"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Note"
         android:textSize="26sp"
         app:layout_constraintBottom_toBottomOf="@id/btBack"
         app:layout_constraintStart_toEndOf="@id/btBack"
@@ -44,6 +50,7 @@
         android:id="@+id/etTaskDes"
         android:layout_width="match_parent"
         android:layout_height="120dp"
+        android:hint="@string/type_task_description"
         android:layout_margin="20dp"
         android:layout_marginTop="20dp"
         android:autofillHints=""
@@ -57,7 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginBottom="8dp"
-        android:text="Task Priority..."
+        android:text="@string/task_priority"
         app:layout_constraintBottom_toTopOf="@id/_temp"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -80,7 +87,7 @@
             android:gravity="center"
             android:paddingHorizontal="12dp"
             android:paddingVertical="8dp"
-            android:text="LOW"
+            android:text="@string/low"
             android:textColor="@color/foreground"
             android:textStyle="bold" />
 
@@ -95,7 +102,7 @@
             android:gravity="center"
             android:paddingHorizontal="12dp"
             android:paddingVertical="8dp"
-            android:text="Medium"
+            android:text="@string/medium"
             android:textColor="@color/foreground"
             android:textStyle="bold" />
 
@@ -109,7 +116,7 @@
             android:gravity="center"
             android:paddingHorizontal="12dp"
             android:paddingVertical="8dp"
-            android:text="High"
+            android:text="@string/high"
             android:textColor="@color/foreground"
             android:textStyle="bold" />
     </LinearLayout>
@@ -127,7 +134,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginBottom="8dp"
-            android:text="Day of task..." />
+            android:text="@string/day_of_task" />
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -147,7 +154,7 @@
                     android:foreground="@drawable/ripple_bg"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="4dp"
-                    android:text="Today" />
+                    android:text="@string/today" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -157,7 +164,7 @@
                     android:foreground="@drawable/ripple_bg"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="4dp"
-                    android:text="Tomorrow" />
+                    android:text="@string/tomorrow" />
 
             </LinearLayout>
         </HorizontalScrollView>
@@ -168,7 +175,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
-            android:text="Time of task..." />
+            android:text="@string/time_of_task" />
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -195,7 +202,8 @@
         android:background="@drawable/selected_bg"
         android:backgroundTint="@color/primary_dark"
         android:foreground="?attr/selectableItemBackground"
-        android:text="Add Task"
+        android:text="@string/add_task"
         app:layout_constraintTop_toBottomOf="@id/dateAndTimeLayout" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

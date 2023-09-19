@@ -1,6 +1,5 @@
 package com.tomer.tasktick.viewmodals
 
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,15 +8,40 @@ import com.tomer.tasktick.R
 import com.tomer.tasktick.modals.Task
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
-import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
-import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
 class TaskViewModal @Inject constructor(private val gson: Gson) : ViewModel() {
+
+    companion object {
+        private val cla: Calendar = Calendar.getInstance()
+        fun timeStart(timeCreated: Long): String {
+            cla.timeInMillis = timeCreated
+            return listTime[timeMap[cla.get(Calendar.HOUR_OF_DAY)] ?: 4]
+        }
+
+        val months = listOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+        val listTime = mutableListOf(
+            "5 AM", "6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM",
+            "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM",
+            "9 PM", "10 PM", "11 PM", "12 AM", "1 AM", "2 AM", "3 AM", "4 AM"
+        )
+
+        val timeList = mutableListOf(
+            5, 6, 7, 8, 9, 10, 11, 12,
+            13, 14, 15, 16, 17, 18, 19,
+            20, 21, 22, 23, 0, 1, 2, 3, 4
+        )
+        val timeMap = mapOf(
+            5 to 0, 6 to 1, 7 to 2, 8 to 3, 9 to 4, 10 to 5, 11 to 6, 12 to 7, 13 to 8,
+            14 to 9, 15 to 10, 16 to 11, 17 to 12, 18 to 13, 19 to 14, 20 to 15, 21 to 16,
+            22 to 17, 23 to 18, 0 to 19, 1 to 20, 2 to 21, 3 to 22, 4 to 23
+        )
+
+    }
+
     fun setTaskDes(data: String) {
         textEt = data
         val c = Calendar.getInstance()
@@ -43,12 +67,7 @@ class TaskViewModal @Inject constructor(private val gson: Gson) : ViewModel() {
         //time
         c.time = Date(task.timeCreated)
         val h = c.get(Calendar.HOUR_OF_DAY)
-        var ind = 0
-        timeList.filterIndexed { index, i ->
-            if (i == h) ind = index
-            true
-        }
-        _time.value = ind
+        _time.value = timeMap[h]
         textEt = task.des
     }
 
@@ -69,17 +88,6 @@ class TaskViewModal @Inject constructor(private val gson: Gson) : ViewModel() {
         _time.value = t
     }
 
-    private val months = listOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
-    val listTime = mutableListOf(
-        "5 AM", "6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM",
-        "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM",
-        "9 PM", "10 PM", "11 PM", "12 AM", "1 AM", "2 AM", "3 AM", "4 AM"
-    )
-    val timeList = mutableListOf(
-        5, 6, 7, 8, 9, 10, 11, 12,
-        13, 14, 15, 16, 17, 18, 19,
-        20, 21, 22, 23, 0, 1, 2, 3, 4
-    )
 
     //region DATES
     private val _dates = MutableLiveData<List<String>>()

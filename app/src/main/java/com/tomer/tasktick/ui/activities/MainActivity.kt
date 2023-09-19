@@ -1,28 +1,25 @@
 package com.tomer.tasktick.ui.activities
 
+import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.renderscript.Allocation
-import android.renderscript.Element
-import android.renderscript.RenderScript
-import android.renderscript.ScriptIntrinsicBlur
-import android.util.Log
+import android.view.View
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.withCreated
 import androidx.recyclerview.widget.ItemTouchHelper
+import com.google.gson.Gson
 import com.tomer.tasktick.R
 import com.tomer.tasktick.adap.TaskAdap
 import com.tomer.tasktick.databinding.ActivityMainBinding
+import com.tomer.tasktick.modals.Task
 import com.tomer.tasktick.ui.views.SwipeHelper
 import com.tomer.tasktick.viewmodals.MainViewModal
+import com.tomer.tasktick.viewmodals.TaskViewModal
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import java.net.URLDecoder
+import java.util.Calendar
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -30,6 +27,32 @@ class MainActivity : AppCompatActivity(), TaskAdap.CallbackClick {
 
     private val b by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val viewModal: MainViewModal by viewModels()
+
+    @Inject
+    lateinit var gson: Gson
+
+    private val taskContract = object : ActivityResultContract<Task?, Task?>() {
+        override fun createIntent(context: Context, input: Task?): Intent {
+            return Intent(this@MainActivity, TaskActivity::class.java).apply {
+                if (input != null) {
+                    putExtra("task", gson.toJson(input))
+                }
+            }
+        }
+
+        override fun parseResult(resultCode: Int, intent: Intent?): Task? {
+            if (resultCode == RESULT_OK) {
+                return gson.fromJson(intent!!.getStringExtra("task").toString(), Task::class.java)
+            }
+            return null
+        }
+    }
+
+    private val taskL = registerForActivityResult(taskContract) {
+        if (it != null) {
+            viewModal.saveTask(it)
+        }
+    }
 
     private val adap by lazy { TaskAdap(this) }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,8 +63,7 @@ class MainActivity : AppCompatActivity(), TaskAdap.CallbackClick {
         b.rvTasks.adapter = adap
         ItemTouchHelper(SwipeHelper(this) { pos ->
             if (pos != -1)
-                viewModal.removeFromRv(adap.currentList[pos].id)
-
+                viewModal.removeFromRv(pos)
         }).apply {
             attachToRecyclerView(b.rvTasks)
         }
@@ -50,7 +72,6 @@ class MainActivity : AppCompatActivity(), TaskAdap.CallbackClick {
 
         viewModal.tasksRv.observe(this) {
             adap.submitList(it)
-            Log.d("TAG--", "onCreate: ${it.size}")
         }
 
         viewModal.snack.observe(this) {
@@ -71,6 +92,14 @@ class MainActivity : AppCompatActivity(), TaskAdap.CallbackClick {
             }
         }
 
+        viewModal.currentTask.observe(this) {
+            b.placeHOlder.visibility = View.GONE
+            b.currentTask.root.visibility = View.VISIBLE
+            b.tvUpTask.visibility = View.VISIBLE
+            b.currentTask.tvTask.text = URLDecoder.decode(it.des,"UTF-8")
+            b.currentTask.tvTimeStarts.text = TaskViewModal.timeStart(it.timeCreated)
+        }
+
         //endregion ::OBSERVERS
 
         b.apply {
@@ -79,18 +108,28 @@ class MainActivity : AppCompatActivity(), TaskAdap.CallbackClick {
                 viewModal.undo()
             }
             btAddTask.setOnClickListener {
-                val i = Intent(this@MainActivity,TaskActivity::class.java)
-                startActivity(i)
+                startTaskActivity(null)
             }
+            b.currentTask.lottie.visibility  = View.GONE
         }
+
+        val c = Calendar.getInstance()
+        b.tvDateDay.text = c.get(Calendar.DAY_OF_MONTH).toString()
+        b.tvDateYear.text = c.get(Calendar.YEAR).toString()
+        b.tvDateMonth.text = TaskViewModal.months[c.get(Calendar.MONTH)]
 
     }
 
     override fun onClick(pos: Int) {
-        Log.d("TAG--", "onClick: $pos")
+
     }
 
     override fun onDone(pos: Int) {
-        Log.d("TAG--", "onDone: $pos")
+        viewModal.updateTask(pos)
+    }
+
+    private fun startTaskActivity(task: Task?) {
+        taskL.launch(task)
+        overridePendingTransition(R.anim.no_anim, R.anim.no_anim)
     }
 }

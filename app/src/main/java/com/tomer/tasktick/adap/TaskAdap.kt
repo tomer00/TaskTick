@@ -12,9 +12,10 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.airbnb.lottie.LottieAnimationView
 import com.tomer.tasktick.R
 import com.tomer.tasktick.modals.Task
+import com.tomer.tasktick.viewmodals.TaskViewModal
+import java.net.URLDecoder
 
 class TaskAdap(private val clickLis: CallbackClick) : ListAdapter<Task, TaskAdap.SamHolder>(TaskUtil()) {
-
 
     private val cli = View.OnClickListener {
         (it as LottieAnimationView).playAnimation()
@@ -31,23 +32,28 @@ class TaskAdap(private val clickLis: CallbackClick) : ListAdapter<Task, TaskAdap
 
     override fun onBindViewHolder(holder: SamHolder, position: Int) {
         holder.b.apply {
+            val item = getItem(position)
             bg.setCol(
                 (
-                        when (getItem(position).priority) {
+                        when (item.priority) {
                             1 -> Color.GREEN
                             2 -> Color.YELLOW
                             else -> Color.RED
                         }
                         )
             )
-            tvTask.text = currentList[position].des
-            if (getItem(position).isDone) {
+            tvTask.text = URLDecoder.decode(currentList[position].des, "UTF-8")
+            tvTimeStarts.text = TaskViewModal.timeStart(item.timeCreated)
+            if (item.isDone) {
                 tvTask.paintFlags = tvTask.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 bg.setCol(ContextCompat.getColor(this.root.context, R.color.gray))
                 lottie.progress = 1f
+                tvTimeStarts.append(" Completed at ${TaskViewModal.timeStart(item.timeDone)}")
             } else {
                 lottie.tag = position
                 lottie.setOnClickListener(cli)
+                lottie.progress = 0f
+                tvTask.paintFlags = 0
             }
         }
     }
