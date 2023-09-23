@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -31,13 +32,9 @@ class MainActivity : AppCompatActivity(), TaskAdap.CallbackClick {
     @Inject
     lateinit var gson: Gson
 
-    private val taskContract = object : ActivityResultContract<Task?, Task?>() {
-        override fun createIntent(context: Context, input: Task?): Intent {
-            return Intent(this@MainActivity, TaskActivity::class.java).apply {
-                if (input != null) {
-                    putExtra("task", gson.toJson(input))
-                }
-            }
+    private val taskContract = object : ActivityResultContract<Unit, Task?>() {
+        override fun createIntent(context: Context, input: Unit): Intent {
+            return Intent(this@MainActivity, TaskActivity::class.java)
         }
 
         override fun parseResult(resultCode: Int, intent: Intent?): Task? {
@@ -63,7 +60,7 @@ class MainActivity : AppCompatActivity(), TaskAdap.CallbackClick {
         b.rvTasks.adapter = adap
         ItemTouchHelper(SwipeHelper(this) { pos ->
             if (pos != -1)
-                viewModal.removeFromRv(pos)
+                viewModal.removeFromRv(adap.currentList[pos].id)
         }).apply {
             attachToRecyclerView(b.rvTasks)
         }
@@ -96,7 +93,7 @@ class MainActivity : AppCompatActivity(), TaskAdap.CallbackClick {
             b.placeHOlder.visibility = View.GONE
             b.currentTask.root.visibility = View.VISIBLE
             b.tvUpTask.visibility = View.VISIBLE
-            b.currentTask.tvTask.text = URLDecoder.decode(it.des,"UTF-8")
+            b.currentTask.tvTask.text = URLDecoder.decode(it.des, "UTF-8")
             b.currentTask.tvTimeStarts.text = TaskViewModal.timeStart(it.timeCreated)
         }
 
@@ -108,7 +105,7 @@ class MainActivity : AppCompatActivity(), TaskAdap.CallbackClick {
                 viewModal.undo()
             }
             btAddTask.setOnClickListener {
-                startTaskActivity(null)
+                startTaskActivity()
             }
             b.currentTask.lottie.visibility  = View.GONE
         }
@@ -121,15 +118,19 @@ class MainActivity : AppCompatActivity(), TaskAdap.CallbackClick {
     }
 
     override fun onClick(pos: Int) {
-
+        Toast.makeText(this, "${adap.currentList[pos].id}", Toast.LENGTH_SHORT).show()
     }
 
     override fun onDone(pos: Int) {
         viewModal.updateTask(pos)
+        b.root.postDelayed({
+            adap.currentList[pos].isDone = true
+            adap.notifyItemChanged(pos)
+        },1000)
     }
 
-    private fun startTaskActivity(task: Task?) {
-        taskL.launch(task)
+    private fun startTaskActivity() {
+        taskL.launch(Unit)
         overridePendingTransition(R.anim.no_anim, R.anim.no_anim)
     }
 }

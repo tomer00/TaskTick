@@ -6,5 +6,5 @@ data class Task(
     val timeCreated: Long,
     val timeDone: Long = 0L,
     val priority:Int,//1=low 2=medium 3=urgent
-    val isDone: Boolean = false
+    var isDone: Boolean = false
 )

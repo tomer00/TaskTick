@@ -32,10 +32,8 @@ class MainViewModal @Inject constructor(private val repo: TaskRepo, con: Applica
     private val upperTime: Long
     //endregion DAY
 
-
-    private var undoCycle = true
     private lateinit var oldList: List<Task>
-    private lateinit var delTask: Task
+    private var delTask: Task = Task(-1, "", 0L, 0L, 0, false)
     private val countDown = object : CountDownTimer(3000L, 3000L) {
         override fun onTick(p0: Long) {
 
@@ -43,28 +41,37 @@ class MainViewModal @Inject constructor(private val repo: TaskRepo, con: Applica
 
         override fun onFinish() {
             _snack.value = false
-            if (undoCycle)
-                repo.delete(delTask)
-
+            repo.delete(delTask)
         }
 
     }
 
-    fun removeFromRv(pos: Int) {
+    fun removeFromRv(id: Int) {
+        if (_snack.value == true) {
+            countDown.cancel()
+            repo.delete(delTask)
+            countDown.start()
+        } else {
+            _snack.value = true
+            countDown.start()
+        }
         val nL = mutableListOf<Task>()
         oldList = _tasksRv.value!!
         nL.addAll(oldList)
-        delTask = oldList[pos]
-        nL.removeAt(pos)
+        var ir = 0
+        for (i in oldList.indices) {
+            if (oldList[i].id == id) {
+                delTask = oldList[i]
+                ir = i
+                break
+            }
+        }
+        nL.removeAt(ir)
         _tasksRv.value = nL
-        _snack.value = true
-        undoCycle = true
-        countDown.start()
     }
 
     fun undo() {
         _snack.value = false
-        undoCycle = false
         _tasksRv.value = oldList
         countDown.cancel()
     }
@@ -86,6 +93,7 @@ class MainViewModal @Inject constructor(private val repo: TaskRepo, con: Applica
         val t = _tasksRv.value?.get(pos)
         if (t != null) {
             repo.updateTask(t.id, Date().time)
+            _tasksRv.value?.get(pos)!!.isDone = true
         }
     }
 
@@ -105,9 +113,8 @@ class MainViewModal @Inject constructor(private val repo: TaskRepo, con: Applica
     init {
 
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
-        val d = sdf.parse(sdf.format(Date()))!!
         val nd = Date(getDate().time + 86400000)
-        if (d.after(nd)) {
+        if (Date().after(nd)) {
             repo.setLast()
             pref.edit().putString("date", sdf.format(Date())).apply()
         }
